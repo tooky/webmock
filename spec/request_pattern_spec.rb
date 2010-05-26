@@ -124,6 +124,16 @@ describe RequestPattern do
         RequestPattern.new(:post, 'www.example.com', :body => {:a => '1', :b => 'five'}).
           should match(RequestSignature.new(:post, "www.example.com", :body => 'a=1&b=five'))
       end
+
+      it "should match different ordered body params" do
+        RequestPattern.new(:post, 'www.example.com', :body => {:a => '1', :b => 'five'}).
+          should match(RequestSignature.new(:post, "www.example.com", :body => 'b=five&a=1'))
+      end
+
+      it "should match complex body params" do
+        RequestPattern.new(:post, 'www.example.com', :body => {:a => {:nest => '1'}, :b => ['five', 'four', 'seven']}).
+          should match(RequestSignature.new(:post, "www.example.com", :body => 'a[nest]=1&b[]=five&b[]=four&b[]=seven'))
+      end
     end
 
 
