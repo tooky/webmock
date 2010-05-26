@@ -121,7 +121,7 @@ describe RequestPattern do
 
     describe "when body is supplied as a hash" do
       it "should match post body params when body is expected with a hash" do
-        RequestPattern.new(:post, 'www.example.com', :body => {:a => 1, :b => 'five'}).
+        RequestPattern.new(:post, 'www.example.com', :body => {:a => '1', :b => 'five'}).
           should match(RequestSignature.new(:post, "www.example.com", :body => 'a=1&b=five'))
       end
     end

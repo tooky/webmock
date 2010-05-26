@@ -80,12 +80,21 @@ module WebMock
   class BodyPattern
     def initialize(pattern)
       @pattern = pattern
+      if @pattern.is_a?(Hash)
+        pattern_uri = Addressable::URI.new
+        pattern_uri.query_values = @pattern
+        @pattern = pattern_uri.query_values
+      end
     end
 
     def matches?(uri)
-      empty_string?(@pattern) && empty_string?(uri) ||
-        @pattern == uri ||
-        @pattern === uri
+      if (@pattern).is_a?(Hash)
+        @pattern.empty? || Addressable::URI.parse('?' + uri).query_values == @pattern
+      else
+        empty_string?(@pattern) && empty_string?(uri) ||
+          @pattern == uri ||
+          @pattern === uri
+      end
     end
     
     def to_s
